@@ -5,7 +5,7 @@ import { Toaster } from '@/components/ui/sonner';
 import Header from './components/Header';
 import Home from './components/Home';
 import Login from './components/Login';
-import Signup from './components/Signup';
+import Signup from './components/SignUp';
 
 
 const App = () => {

@@ -1,9 +1,9 @@
-import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, UserCircle, LogOut } from 'lucide-react';
+import React from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu, UserCircle, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,10 +17,10 @@ import {
   NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
-} from '@/components/ui/navigation-menu';
+} from "@/components/ui/navigation-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { toast } from 'sonner';
-import axios from 'axios';
+import { toast } from "sonner";
+import axios from "axios";
 
 const Header = () => {
   const location = useLocation();
@@ -29,11 +29,11 @@ const Header = () => {
 
   React.useEffect(() => {
     const checkAuth = () => {
-      const storedUser = localStorage.getItem('user');
-      const accessToken = localStorage.getItem('accessToken');
-      
-      console.log('Stored user:', storedUser);
-      console.log('Access token:', accessToken);
+      const storedUser = localStorage.getItem("user");
+      const accessToken = localStorage.getItem("accessToken");
+
+      console.log("Stored user:", storedUser);
+      console.log("Access token:", accessToken);
 
       if (storedUser && accessToken) {
         setUser(JSON.parse(storedUser));
@@ -41,38 +41,35 @@ const Header = () => {
     };
 
     checkAuth();
-    window.addEventListener('storage', checkAuth);
+    window.addEventListener("storage", checkAuth);
 
-    return () => window.removeEventListener('storage', checkAuth);
+    return () => window.removeEventListener("storage", checkAuth);
   }, []);
 
   const handleLogout = async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem("accessToken");
       await axios.post(
-        'http://localhost:8000/api/v1/users/logout',
+        "http://localhost:8000/api/v1/users/logout",
         {},
         {
           headers: { Authorization: `Bearer ${accessToken}` },
-          withCredentials: true
+          withCredentials: true,
         }
       );
-      
-      localStorage.removeItem('user');
-      localStorage.removeItem('accessToken');
+
+      localStorage.removeItem("user");
+      localStorage.removeItem("accessToken");
       setUser(null);
-      toast.success('Logged out successfully');
-      navigate('/login');
+      toast.success("Logged out successfully");
+      navigate("/login");
     } catch (error) {
-      console.error('Logout error:', error);
-      toast.error('Logout failed');
+      console.error("Logout error:", error);
+      toast.error("Logout failed");
     }
   };
 
-  const navigation = [
-    { path: '/', label: 'Home' },
-  
-  ];
+  const navigation = [{ path: "/", label: "Home" }];
 
   return (
     <header className="sticky top-0 z-50 p-2 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -80,8 +77,6 @@ const Header = () => {
         <div className="mr-4 flex">
           <Link to="/" className="flex items-center ml-4 space-x-2">
             <UserCircle className="h-6 w-6" />
-           
-           
           </Link>
         </div>
 
@@ -91,7 +86,9 @@ const Header = () => {
               <NavigationMenuItem key={item.path}>
                 <NavigationMenuLink
                   className={`group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 ${
-                    location.pathname === item.path ? 'text-primary' : 'text-muted-foreground'
+                    location.pathname === item.path
+                      ? "text-primary"
+                      : "text-muted-foreground"
                   }`}
                   onClick={() => navigate(item.path)}
                 >
@@ -146,11 +143,14 @@ const Header = () => {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                <Button
+                  variant="ghost"
+                  className="relative h-9 w-9 rounded-full"
+                >
                   <Avatar className="h-9 w-9">
                     <AvatarImage src={user.coverImage} alt={user.username} />
                     <AvatarFallback>
-                      {user.username?.[0]?.toUpperCase() || 'U'}
+                      {user.username?.[0]?.toUpperCase() || "U"}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
@@ -158,14 +158,16 @@ const Header = () => {
               <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{user.username}</p>
+                    <p className="text-sm font-medium leading-none">
+                      {user.username}
+                    </p>
                     <p className="text-xs leading-none text-muted-foreground">
                       {user.email}
                     </p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem 
+                <DropdownMenuItem
                   className="text-red-500 focus:text-red-500 cursor-pointer"
                   onClick={handleLogout}
                 >
@@ -176,12 +178,12 @@ const Header = () => {
             </DropdownMenu>
           ) : (
             <>
-              {location.pathname !== '/login' && (
+              {location.pathname !== "/login" && (
                 <Button variant="ghost" asChild>
                   <Link to="/login">Login</Link>
                 </Button>
               )}
-              {location.pathname !== '/signup' && (
+              {location.pathname !== "/signup" && (
                 <Button asChild>
                   <Link to="/signup">Sign Up</Link>
                 </Button>
