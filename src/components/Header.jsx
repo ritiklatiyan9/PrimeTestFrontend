@@ -50,7 +50,7 @@ const Header = () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
       await axios.post(
-        "http://localhost:8000/api/v1/users/logout",
+        "https://primetestbackend.onrender.com/api/v1/users/logout",
         {},
         {
           headers: { Authorization: `Bearer ${accessToken}` },
